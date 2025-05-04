@@ -91,7 +91,7 @@ Refer to [NEXT_STEPS.md](NEXT_STEPS.md) for detailed plans including:
 Contributions are welcome! Please fork the repository and submit pull requests for bug fixes, features, or improvements. Ensure code quality and include tests where applicable.
 
 ## License
-See the [LICENSE](references/LICENSE) file for license information.
+See the [LICENSE](LICENSE) file for license information.
 
 ## References
 - Configuration examples and API references are available in the `references/` directory.
