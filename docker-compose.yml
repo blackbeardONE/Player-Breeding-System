@@ -1,0 +1,102 @@
+version: '3.8'
+
+services:
+  player-breeding-system:
+    build:
+      context: .
+      dockerfile: Dockerfile.rust
+    ports:
+      - "8080:8080"
+      - "9090:9090"
+    environment:
+      - DATABASE_URL=mysql://user:password@db:3306/playerdb
+      - GENRE_AGENTS_URL=http://genre-agents:8000
+      - EARNEST_AGENTS_URL=http://earnest-agents:8000
+      - SOPHIE_AGENTS_URL=http://sophie-agents:8000
+      - MAO_AI_URL=http://mao-ai:8000
+      - IOANA_AI_URL=http://ioana-ai:8000
+    depends_on:
+      - db
+      - genre-agents
+
+  db:
+    image: mariadb:10.6
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: playerdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./db-init.sql:/docker-entrypoint-initdb.d/db-init.sql:ro
+
+  data-collector:
+    build:
+      context: .
+      dockerfile: Dockerfile.python_microservices
+    working_dir: /app
+    ports:
+      - "8001:8000"
+    command: uvicorn python_microservices.data_collector:app --host 0.0.0.0 --port 8000
+    environment:
+      - DATABASE_URL=mysql+asyncmy://user:password@db:3306/playerdb
+    depends_on:
+      - db
+
+  achievements-collector:
+    build:
+      context: .
+      dockerfile: Dockerfile.python_microservices
+    working_dir: /app
+    ports:
+      - "8002:8000"
+    command: uvicorn python_microservices.achievements_collector:app --host 0.0.0.0 --port 8000
+    environment:
+      - DATABASE_URL=mysql+asyncmy://user:password@db:3306/playerdb
+    depends_on:
+      - db
+
+  behavior-collector:
+    build:
+      context: .
+      dockerfile: Dockerfile.python_microservices
+    working_dir: /app
+    ports:
+      - "8003:8000"
+    command: uvicorn python_microservices.behavior_collector:app --host 0.0.0.0 --port 8000
+    environment:
+      - DATABASE_URL=mysql+asyncmy://user:password@db:3306/playerdb
+    depends_on:
+      - db
+
+  financial-data-collector:
+    build:
+      context: .
+      dockerfile: Dockerfile.python_microservices
+    working_dir: /app
+    ports:
+      - "8004:8000"
+    command: uvicorn python_microservices.financial_data_collector:app --host 0.0.0.0 --port 8000
+    environment:
+      - DATABASE_URL=mysql+asyncmy://user:password@db:3306/playerdb
+    depends_on:
+      - db
+
+  genre-agents:
+    build:
+      context: .
+      dockerfile: Dockerfile.python_microservices
+    working_dir: /app
+    ports:
+      - "8005:8000"
+    command: uvicorn python_microservices.genre_agents_service:app --host 0.0.0.0 --port 8000
+    environment:
+      - DATABASE_URL=mysql+asyncmy://user:password@db:3306/playerdb
+    depends_on:
+      - db
+
+volumes:
+  db_data:

@@ -1,0 +1,33 @@
+# Configuration for Player Breeding System
+
+database_url = "mysql+asyncmy://user:password@db:3306/playerdb"
+
+[blade_ai]
+quest_log_threshold = 10
+character_level_threshold = 5
+gear_system_enabled = true
+
+[claire_agent]
+wealth_threshold = 1000.0
+drop_rate_increase = 0.05
+
+[earnest_agent]
+wealth_threshold = 1000.0
+drop_rate_increase = 0.05
+
+[sophie_agent]
+wealth_threshold = 1000.0
+drop_rate_increase = 0.05
+
+[mao_ai]
+behavior_tracking_enabled = true
+clustering_algorithm = "kmeans"
+
+[ioana_ai]
+quest_templates_path = "quests/templates"
+difficulty_balancing_enabled = true
+
+[together_ai]
+api_key = "56c8eeff9971269d7a7e625ff88e8a83a34a556003a5c87c289ebe9a3d8a3d2c"
+api_url = "https://api.together.xyz/v1/chat/completions"
+model_name = "deepseek-ai/DeepSeek-R1"

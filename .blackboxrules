@@ -1,0 +1,101 @@
+-Only modify code directly relevant to the specific request. Avoid changing unrelated functionality.
+-Never replace code with placeholders like `# ... rest of the processing ... `. Always include complete code.
+-Break problems into smaller steps. Think through each step separately before implementing.
+-Always provide a complete PLAN with REASONING based on evidence from code and logs before making changes.
+-Explain you OBSERVATIONS clearly, then provide REASONING to identify the exact issue. Add console logs when needed to gather more information.
+-Break down monolithic files. Implement Modularization.
+-Always start the project with comprehensive log management system with proper web log viewer, logging levels and log rotation.
+-Default terminal profile is Git Bash. Use commands that work in Git Bash.
+-Never create files with prefixes like "_new,_fixed,_enhanced,_v1,_v2,_v3,_final,.new,.fixed,.enhanced,.v1,.v2,.v3,.final. Instead edit the original file. If stuck at persistent edit tool issue, or permission issue, stop and ask for help.
+-Must use mariaDB
+-Always create and update requirements.txt
+-Use Rust Programming Language
+-Use TOML Technology
+-Use Together AI API Key: 56c8eeff9971269d7a7e625ff88e8a83a34a556003a5c87c289ebe9a3d8a3d2c
+-Refer to file under /d/Projects/Player Breeding System/references for Together AI API integration coding best practices.
+-Use this LLM model: deepseek-ai/DeepSeek-R1 - DeepSeek R
+-Use these Together AI endpoints:
+--https://api.together.xyz/v1/chat/completions
+--https://api.together.xyz/v1/models
+
+General Guidelines:
+Workflow & Plan
+1. Core Workflow
+Game Type Detection (Blade AI)
+
+Input: Game client metadata/API calls.
+
+Action: Classify game type (MMORPG, MMORTS, Survival) using rule-based checks or ML.
+
+Output: Route data to Claire, Earnest, or Sophie AI.
+
+Data Collection & Probability Tuning (Claire/Earnest/Sophie AI)
+
+Data Types:
+
+Stats: Combat level, resources (MMORTS), survival time (Survival).
+
+Achievements: Quests completed, milestones.
+
+Financial: In-game purchases, currency flow.
+
+Adjustments:
+
+Use ML models (via Together AI) to dynamically tune drop rates, loot quality, and win probabilities based on player performance/spending.
+
+Quest Assignment (Ioana AI)
+
+Input: Aggregated stats, achievements, and financial data.
+
+Action: Generate personalized quests using DeepSeek-R1 (e.g., "Craft a rare sword" for under-geared players).
+
+Output: Quests pushed to the player’s interface.
+
+Player Behavior Tracking (Mao AI)
+
+Track: Frequently visited areas, NPCs, or features (e.g., auction house, crafting stations).
+
+Use Case: Inform quest design (e.g., suggest PvP quests for arena-active players).
+
+2. System Architecture
+Database (MariaDB):
+
+Tables: players, game_types, probabilities, quests, player_behavior.
+
+AI Agents (Rust):
+
+Blade (game detection), Claire/Earnest/Sophie (data/probabilities), Ioana (quests), Mao (behavior).
+
+Microservices (Python):
+
+APIs for data ingestion, Together AI integration, and quest delivery.
+
+TOML Configuration:
+
+Define rules (e.g., MMORPG.drop_rate_adjustment = 0.05).
+
+3. Data Flow
+Game client → Blade AI (detect type).
+
+Blade → Claire/Earnest/Sophie (collect data → adjust probabilities).
+
+Data → MariaDB (storage).
+
+Ioana AI queries DB → generates quests via DeepSeek-R1.
+
+Mao AI logs behavior → feeds back into quest/stat adjustments.
+
+4. Technology Implementation
+Blade AI (Rust): Regex/ML model to parse game IDs or API endpoints.
+
+Claire/Earnest/Sophie (Rust + Python):
+
+Rust for real-time probability tuning.
+
+Python microservices for Together API calls (e.g., predict_drop_rate()).
+
+Ioana AI (Python): DeepSeek-R1 fine-tuned for quest generation.
+
+TOML: Store game-specific rules (e.g., Survival loot tables).
+
+Summary: A Rust-Python hybrid system using AI agents to detect, analyze, and optimize player progression through dynamic adjustments and personalized quests, backed by MariaDB and DeepSeek-R1.

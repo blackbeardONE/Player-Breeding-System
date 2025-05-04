@@ -1,0 +1,3 @@
+CREATE USER IF NOT EXISTS 'user'@'%' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON playerdb.* TO 'user'@'%';
+FLUSH PRIVILEGES;

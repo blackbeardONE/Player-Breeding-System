@@ -102,7 +102,32 @@ See the [LICENSE](references/LICENSE) file for license information.
 
 This README provides a comprehensive overview and guide to the Player Breeding System project for developers and contributors.
 
-## 👨‍💻 Developer
+## Workflow Visualization
+
+```mermaid
+flowchart TD
+    GameClient[Game Client]
+    BladeAI[Blade AI (Game Type Detection)]
+    GenreAgents[Claire, Earnest, Sophie Agents (Genre-specific AI)]
+    DataCollection[Data Collection Microservices]
+    Database[MariaDB Database]
+    MaoAI[Mao AI (Behavior Tracking)]
+    IoanaAI[Ioana AI (Quest Generation)]
+    TogetherAI[Together AI API]
+
+    GameClient -->|Player Data| DataCollection
+    DataCollection --> Database
+    Database --> BladeAI
+    BladeAI --> GenreAgents
+    GenreAgents --> Database
+    Database --> MaoAI
+    MaoAI --> Database
+    Database --> IoanaAI
+    IoanaAI --> TogetherAI
+    IoanaAI --> GameClient
+```
+
+## Developer 👨‍💻
 
 Developed by [Blackbeard](https://blackbeard.one) | [Ten Titanics](https://tentitanics.com) | [GitHub](https://github.com/blackbeardONE)
 
