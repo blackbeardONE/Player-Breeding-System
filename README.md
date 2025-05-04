@@ -106,14 +106,14 @@ This README provides a comprehensive overview and guide to the Player Breeding S
 
 ```mermaid
 flowchart TD
-    GameClient[Game Client]
-    BladeAI[Blade AI (Game Type Detection)]
-    GenreAgents[Claire, Earnest, Sophie Agents (Genre-specific AI)]
-    DataCollection[Data Collection Microservices]
-    Database[MariaDB Database]
-    MaoAI[Mao AI (Behavior Tracking)]
-    IoanaAI[Ioana AI (Quest Generation)]
-    TogetherAI[Together AI API]
+    GameClient("Game Client")
+    BladeAI("Blade AI (Game Type Detection)")
+    GenreAgents("Claire, Earnest, Sophie Agents (Genre-specific AI)")
+    DataCollection("Data Collection Microservices")
+    Database("MariaDB Database")
+    MaoAI("Mao AI (Behavior Tracking)")
+    IoanaAI("Ioana AI (Quest Generation)")
+    TogetherAI("Together AI API")
 
     GameClient -->|Player Data| DataCollection
     DataCollection --> Database
