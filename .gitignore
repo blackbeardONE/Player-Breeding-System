@@ -52,3 +52,4 @@ build/
 *.sublime-workspace
 *.sublime-project
 .blackboxrules
+.gitignore
