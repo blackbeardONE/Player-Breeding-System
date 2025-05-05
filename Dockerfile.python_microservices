@@ -1,14 +1,34 @@
+# Use official Python image as base
 FROM python:3.10-slim
 
+# Set working directory
 WORKDIR /app
 
-COPY requirements.txt /app/
+# Install mariadb client for migrations (includes mysqladmin)
+RUN apt-get update && apt-get install -y mariadb-client && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements and install
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install --no-cache-dir uvicorn
 
-COPY python_microservices /app/python_microservices
-COPY src/config.toml /app/src/config.toml
+# Copy microservices code
+COPY python_microservices/ ./python_microservices/
 
+# Copy config file
+COPY src/config.toml ./src/config.toml
+
+# Copy scripts directory and make scripts executable
+COPY scripts/ ./scripts/
+RUN chmod +x ./scripts/*.sh
+
+# Set environment variable for config path
+ENV CONFIG_PATH=/app/src/config.toml
+
+# Set PYTHONPATH to include /app for module imports
 ENV PYTHONPATH=/app
 
-CMD ["uvicorn"]
+# Expose port for FastAPI (default 8000)
+EXPOSE 8000
+
+# Default command to run tests
+CMD ["pytest", "python_microservices/"]

@@ -51,3 +51,4 @@ build/
 *.rej
 *.sublime-workspace
 *.sublime-project
+.blackboxrules

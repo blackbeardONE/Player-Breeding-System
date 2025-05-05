@@ -1,4 +1,4 @@
-CREATE TABLE achievements (
+CREATE TABLE IF NOT EXISTS achievements (
     achievement_id VARCHAR(36) PRIMARY KEY,
     player_id VARCHAR(36) NOT NULL,
     quest_completed VARCHAR(255),

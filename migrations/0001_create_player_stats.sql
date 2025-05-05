@@ -1,4 +1,4 @@
-CREATE TABLE player_stats (
+CREATE TABLE IF NOT EXISTS player_stats (
     player_id VARCHAR(36) PRIMARY KEY,
     game_id VARCHAR(36) NOT NULL,
     combat_efficiency FLOAT DEFAULT 0,

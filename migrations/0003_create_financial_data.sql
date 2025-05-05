@@ -1,4 +1,4 @@
-CREATE TABLE financial_data (
+CREATE TABLE IF NOT EXISTS financial_data (
     transaction_id VARCHAR(36) PRIMARY KEY,
     player_id VARCHAR(36) NOT NULL,
     in_game_currency FLOAT DEFAULT 0,

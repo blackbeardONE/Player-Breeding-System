@@ -1,4 +1,4 @@
-CREATE TABLE player_behavior (
+CREATE TABLE IF NOT EXISTS player_behavior (
     behavior_id VARCHAR(36) PRIMARY KEY,
     player_id VARCHAR(36) NOT NULL,
     feature_name VARCHAR(255),

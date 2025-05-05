@@ -11,5 +11,6 @@ langchain-openai
 langchain-together
 langchain-community
 pytest
+pytest-asyncio
 toml
 asyncmy

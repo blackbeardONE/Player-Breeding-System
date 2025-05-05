@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  db:
+    image: mariadb:10.6
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: playerdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./db-init.sql:/docker-entrypoint-initdb.d/db-init.sql:ro
+
+  test-runner:
+    build:
+      context: .
+      dockerfile: Dockerfile.python_microservices
+    working_dir: /app
+    environment:
+      - DATABASE_URL=mysql+asyncmy://user:password@db:3306/playerdb
+      - CONFIG_PATH=/app/src/config.toml
+      - PYTHONPATH=/app
+    depends_on:
+      - db
+    volumes:
+      - ./migrations:/app/migrations:ro
+      - ./run_migrations.sh:/app/run_migrations.sh:ro
+      - ./scripts/reset_test_db.sh:/app/reset_test_db.sh:ro
+    entrypoint: ["/bin/sh", "-c"]
+    command: "./scripts/run_all.sh"
+
+  debug-runner:
+    build:
+      context: .
+      dockerfile: Dockerfile.python_microservices
+    working_dir: /app
+    environment:
+      - DATABASE_URL=mysql+asyncmy://user:password@db:3306/playerdb
+      - CONFIG_PATH=/app/src/config.toml
+      - PYTHONPATH=/app
+    depends_on:
+      - db
+    entrypoint: /bin/sh
+    tty: true
+
+volumes:
+  db_data:

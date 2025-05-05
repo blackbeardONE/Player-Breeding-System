@@ -26,6 +26,35 @@ database_url = config.get("database_url")
 database = databases.Database(database_url)
 metadata = sqlalchemy.MetaData()
 
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+import databases
+import sqlalchemy
+import logging
+import toml
+import os
+from python_microservices.logging_setup import setup_logging
+from contextlib import asynccontextmanager
+
+setup_logging()
+
+config_path = os.getenv("CONFIG_PATH")
+if not config_path:
+    config_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "src", "config.toml")
+
+logging.info(f"Resolved config path: {config_path}")
+
+if not os.path.exists(config_path):
+    logging.error(f"Config file not found at {config_path}")
+    raise FileNotFoundError(f"Config file not found at {config_path}")
+
+logging.info(f"Loading config from {config_path}")
+config = toml.load(config_path)
+database_url = config.get("database_url")
+
+database = databases.Database(database_url)
+metadata = sqlalchemy.MetaData()
+
 app = FastAPI()
 
 class FinancialData(BaseModel):
@@ -44,15 +73,15 @@ financial_data = sqlalchemy.Table(
     sqlalchemy.Column("transaction_date", sqlalchemy.TIMESTAMP, server_default=sqlalchemy.func.now()),
 )
 
-@app.on_event("startup")
-async def startup():
+@asynccontextmanager
+async def lifespan(app: FastAPI):
     await database.connect()
     logging.info("Database connected")
-
-@app.on_event("shutdown")
-async def shutdown():
+    yield
     await database.disconnect()
     logging.info("Database disconnected")
+
+app.router.lifespan_context = lifespan
 
 @app.post("/financial_data/")
 async def create_financial_data(data: FinancialData):
